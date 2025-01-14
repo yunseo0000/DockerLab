@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  code-server:
+    image: kingmusung/hachiwotna:practice.v1
+    container_name: ide
+    environment:
+      - DEFAULT_WORKSPACE=${DEFAULT_WORKSPACE}
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - local_code:${DEFAULT_WORKSPACE}
+    ports:
+      - "8443:8443"
+    restart: unless-stopped
+
+volumes:
+  local_code:
+    driver: local
