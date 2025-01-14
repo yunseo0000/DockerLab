@@ -1,0 +1,32 @@
+name: practice
+services:
+  code-server:
+    image: kingmusung/hachiwotna:practice.v1
+    container_name: ide
+    env_file:
+      - .env
+    working_dir: /code
+    ports:
+      - "8443:8443"
+    volumes:
+      - local_code:/code/local
+      - /var/run/docker.sock:/var/run/docker.sock
+      - remote_code:/code/remote
+    depends_on:
+        gitsync:
+          condition: service_completed_successfully
+  gitsync:
+    image: registry.k8s.io/git-sync/git-sync:v4.1.0
+    volumes:
+      - source_code:/tmp
+    env_file:
+      - .env
+    profiles:
+       - init
+volumes:
+      local_code:
+        external: true
+      remote_code:
+        external: true
+      source_code:
+        external: true
